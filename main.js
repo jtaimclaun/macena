@@ -61,6 +61,8 @@
     el.style.fontSize = `${size}px`
     el.style.marginLeft = `${(-left * size) / 100}px`
     el.dataset.fitWidth = String(width) // the container width this size was fitted to
+    // expose the size so CSS can align the "available" link with the M's stem
+    el.closest(".hero__intro")?.style.setProperty("--wm-size", `${size}px`)
   }
 
   const wordmarks = $$("[data-fit]")
@@ -391,10 +393,17 @@
         // Land where the viewer has just finished expanding
         const st = heroTl.scrollTrigger
         y = st.start + (st.end - st.start) * EXPAND
+      } else if (id === "about") {
+        // Centre the whole paragraph (label + text) in the viewport so none of
+        // it is cropped. If it's taller than the screen, start at its top.
+        const first = $(".about__label").getBoundingClientRect().top + currentScroll()
+        const last = $(".about__copy").getBoundingClientRect().bottom + currentScroll()
+        const block = last - first
+        y = block >= window.innerHeight ? first - 24 : first - (window.innerHeight - block) / 2
       } else {
         y = el.getBoundingClientRect().top + currentScroll()
       }
-      scrollToY(y)
+      scrollToY(Math.max(0, y))
       history.replaceState(null, "", `#${id}`)
     })
   })

@@ -12,14 +12,6 @@
   font-display: block;
 }
 
-/* The ↗ glyph comes from Inter Tight (Faculty Glyphic has no arrow) */
-@font-face {
-  font-family: "Arrow";
-  src: url("assets/fonts/inter-tight-arrow.woff2") format("woff2");
-  font-weight: 800;
-  unicode-range: U+2197;
-}
-
 :root {
   --black: #000;
   --white: #fff;
@@ -159,7 +151,8 @@ button {
   position: relative;
   display: inline-grid;
   overflow: hidden;
-  padding-bottom: 0.08em;
+  padding-bottom: calc(0.08em + 2px); /* underline sits 2px further from the word */
+  margin-bottom: -2px; /* ...without moving anything else */
 }
 
 .nav-link__roll > span {
@@ -168,7 +161,7 @@ button {
 }
 
 .nav-link__roll > span:last-child {
-  transform: translateY(110%);
+  transform: translateY(125%);
   font-style: italic;
 }
 
@@ -185,7 +178,7 @@ button {
 
 @media (hover: hover) {
   .nav-link:hover .nav-link__roll > span:first-child {
-    transform: translateY(-110%);
+    transform: translateY(-125%);
   }
 
   .nav-link:hover .nav-link__roll > span:last-child {
@@ -465,7 +458,10 @@ button {
   position: relative;
   z-index: 3;
   display: inline-block;
-  margin-bottom: max(0.4vw, 0.4rem);
+  /* 2px of padding puts the hover underline 2px further from the text; the
+     margin takes it back out and adds 8px more air above MACENA */
+  padding-bottom: 2px;
+  margin-bottom: calc(max(0.4vw, 0.4rem) + 6px);
   font-size: var(--fs-small);
   letter-spacing: 0;
   background: linear-gradient(currentColor, currentColor) left bottom / 0 2px no-repeat;
@@ -477,10 +473,18 @@ button {
   background-size: 100% 2px;
 }
 
-/* Dedicated arrow glyph (text presentation, never the emoji) */
-.arrow-glyph {
-  font-family: "Arrow", var(--font), sans-serif;
-  font-variant-emoji: text;
+/* Thin arrow: an SVG line drawing, about the weight of the type */
+.arrow {
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 0.15em;
+  vertical-align: -0.02em;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
 }
 
 /* ---------- Project viewer ---------- */
@@ -759,23 +763,12 @@ button {
   text-align: center;
 }
 
-.experience__studio a {
-  background: linear-gradient(currentColor, currentColor) left bottom / 0 0.06em no-repeat;
-  transition: background-size 0.4s var(--ease-in-out);
-}
-
-.experience__studio a:hover,
-.experience__studio a:focus-visible {
-  background-size: 100% 0.06em;
-}
-
 .experience__years {
   text-align: right;
 }
 
 @media (hover: hover) {
-  a.experience__row:hover,
-  .experience__row--multi:hover {
+  a.experience__row:hover {
     padding-inline: clamp(0.5rem, 1vw, 1rem);
     color: var(--white);
     background: var(--black);
@@ -813,7 +806,7 @@ button {
 }
 
 .footer__meta > :nth-child(2) {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: proportional-nums;
   text-align: center;
 }
 
@@ -882,9 +875,12 @@ button {
 
   .availability {
     /* ~44px-tall tap area around the 12px text, layout unchanged */
-    padding: 0.95rem 0.7rem;
-    margin: -0.95rem -0.7rem -0.45rem;
+    /* left: +0.018 x wordmark size lines the text up with the M's stem, the
+       edge the eye compares it with (the M's foot serif sits slightly left) */
+    padding: 0.95rem 0.7rem calc(0.95rem + 2px) calc(0.7rem + var(--wm-size, 0px) * 0.018);
+    margin: -0.95rem -0.7rem calc(-0.45rem + 4px) -0.7rem;
     background-origin: content-box; /* hover underline stays under the text */
+    background-position: left 0 bottom -2px;
     font-size: 0.75rem;
   }
 
