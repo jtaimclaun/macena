@@ -452,24 +452,27 @@ button {
   padding: 0 var(--pad) max(var(--pad), env(safe-area-inset-bottom));
 }
 
-.availability {
-  /* Above the wordmark: its boxes are vertically centred on a zero-height
-     line, so on phones they reach up over this link and swallowed taps */
+.hero__links {
   position: relative;
   z-index: 3;
-  display: inline-block;
-  /* 2px of padding puts the hover underline 2px further from the text; the
-     margin takes it back out and adds 8px more air above MACENA */
-  padding-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: calc(max(0.4vw, 0.4rem) + 6px);
+}
+
+.hero__link {
+  display: inline-block;
+  padding-bottom: 2px;
   font-size: var(--fs-small);
   letter-spacing: 0;
+  white-space: nowrap;
   background: linear-gradient(currentColor, currentColor) left bottom / 0 2px no-repeat;
   transition: background-size 0.4s var(--ease-in-out);
 }
 
-.availability:hover,
-.availability:focus-visible {
+.hero__link:hover,
+.hero__link:focus-visible {
   background-size: 100% 2px;
 }
 
@@ -873,15 +876,21 @@ button {
     height: min(78vw, 46svh);
   }
 
-  .availability {
-    /* ~44px-tall tap area around the 12px text, layout unchanged */
-    /* left: +0.018 x wordmark size lines the text up with the M's stem, the
-       edge the eye compares it with (the M's foot serif sits slightly left) */
-    padding: 0.95rem 0.7rem calc(0.95rem + 2px) calc(0.7rem + var(--wm-size, 0px) * 0.018);
+  .hero__links {
     margin: -0.95rem -0.7rem calc(-0.45rem + 4px) -0.7rem;
-    background-origin: content-box; /* hover underline stays under the text */
-    background-position: left 0 bottom -2px;
+  }
+
+  .hero__link {
+    /* ~44px-tall tap areas around both 12px labels, layout unchanged */
+    padding: 0.95rem 0.7rem calc(0.95rem + 2px);
     font-size: 0.75rem;
+    background-origin: content-box;
+    background-position: left 0 bottom -2px;
+  }
+
+  .availability {
+    /* Align with the M's stem rather than its slightly wider foot serif. */
+    padding-left: calc(0.7rem + var(--wm-size, 0px) * 0.018);
   }
 
   .project-ui {
